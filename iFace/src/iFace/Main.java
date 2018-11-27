@@ -74,7 +74,6 @@ public class Main {
 	}
 
 	private static void removeAccount() {
-		//FALTA ACABAR
 		Scanner input = new Scanner(System.in);
 		if (activeUser == null) {
 			System.out.println("Conta não criada");
@@ -90,10 +89,10 @@ public class Main {
 				friendList.remove(userToRemove);
 			}
 			acc.getProfile().setFriendName(friendList);
-			//remover msg e friendshipRequest
-			accounts.remove(userToRemove);
-			activeUser = null;
+			accounts.replace(acc.getName(), acc);
 		}
+		accounts.remove(userToRemove);
+		activeUser = null;
 	}
 
 	private static void profileInfo() {
@@ -114,8 +113,8 @@ public class Main {
 		System.out.println("Digite o nome da comunidade na qual você deseja entrar: ");
 		String communiteName = input.nextLine();
 		if (communities.containsKey(communiteName)) {
-			activeUser.getProfile().setMyCommunities(communiteName);//ARRUMAR O SET DE COMUNIDADE
-			Community.setMembers(activeUser.getName());//NÃO É ASSIM, PRECISO ADD PELA HASH????
+			activeUser.getProfile().getMyCommunities().add(communiteName);
+			communities.get(communiteName).getMembers().add(activeUser.getName());
 			System.out.println("Você acaba de entrar na "+ communiteName);
 		}else{
 			System.out.println("Comunidade inexistente");
@@ -136,7 +135,9 @@ public class Main {
 		String comunitDesc = input.nextLine();
 		c.setDesc(comunitDesc);
 		c.setOwner(activeUser.getName());
-		communities.put(comunitName, c);		
+		activeUser.getProfile().getMyCommunities().add(comunitName);
+		communities.put(comunitName, c);
+		System.out.println("Comunidade Criada com sucesso!");
 	}
 
 	private static void sendMessage() {
@@ -154,8 +155,7 @@ public class Main {
 			String newMsg = input.nextLine();
 			newSend.setMsg(newMsg);
 			newSend.setSenderName(activeUser.getName());
-			//PROCURO NAS ACCOUNTS, ENTRO NO PERFIL E ADD A MSG
-			///PRECISO ADICIONAR A MSG AO ENVIADO
+			accounts.get(receiverName).getProfile().getMyMenssage().add(newMsg);
 		}else {
 			System.out.println("Usuario inexistente");
 		}		
@@ -170,9 +170,13 @@ public class Main {
 		FriendshipRequest newRequest = new FriendshipRequest();
 		System.out.println("Quem você deseja adicionar: ");
 		String requested = input.nextLine();
-		//PRECISO COLOCAR A CONDIÇÃO SE JA TENHO COMO AMIGO????
 		if (accounts.containsKey(requested)) {
-			newRequest.sendRequest(activeUser.getProfile(), accounts.get(requested).getProfile());
+			if (activeUser.getProfile().getFriendName().contains(requested)) {
+				System.out.println("Vocês já são amigos!");
+			}else {
+				newRequest.sendRequest(activeUser.getProfile(), accounts.get(requested).getProfile());
+				accounts.get(requested).getProfile().getFriendshipRequest().add(newRequest);
+			}
 		} else {
 			System.out.println("Pessoa inexistente.");
 		}
