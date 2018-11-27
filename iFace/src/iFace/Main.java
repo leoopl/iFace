@@ -16,10 +16,22 @@ public class Main {
 		accounts = new HashMap<>();
 		communities = new HashMap<>();
 		
-		
-		while (true) {
-			System.out.println("..");
-			int input = scan.nextInt();
+		int input;
+		do {
+			System.out.println("#####################################");
+			System.out.println("----------------MENU----------------");
+			System.out.println("#####################################");
+		    System.out.println("[1] Criar Conta");
+		    System.out.println("[2] Criar Perfil");
+		    System.out.println("[3] Editar Perfil");
+		    System.out.println("[4] Adicionar Amigo");
+		    System.out.println("[5] Mandar Mensagem");
+		    System.out.println("[6] Criar Comunidade");
+		    System.out.println("[7] Entrar em uma Comunidade");
+		    System.out.println("[8] Informação do Perfil");
+		    System.out.println("[9] Remover Conta");
+		    System.out.println("[0] Sair");
+			input = scan.nextInt();
 
 			switch (input) {
 			case 1:
@@ -48,10 +60,16 @@ public class Main {
 				break;
 			case 9:
 				removeAccount();
+				break;
+			case 0:
+				System.out.println("bye bye!");
+				break;
+			default:
+				System.out.println("Operação invalida");
 
 			}
 
-		}
+		}while(input != 0);
 
 	}
 
@@ -83,10 +101,20 @@ public class Main {
 	}
 
 	private static void createComunite() {
-		// só posso criar se estiver logado
-		// pedir o nome, a descrição, e salvar o id do criador;
-		//add na hash
-		
+		Scanner input = new Scanner(System.in);
+		if (activeUser == null) {
+			System.out.println("Conta não criada");
+			return;
+		}
+		Community c = new Community();
+		System.out.println("Digite o Nome da Comunidade: ");
+		String comunitName = input.nextLine();
+		c.setName(comunitName);
+		System.out.println("Digite a Descrição da Comunidade: ");
+		String comunitDesc = input.nextLine();
+		c.setDesc(comunitDesc);
+		c.setOwner(activeUser.getName());
+		communities.put(activeUser.getName(), c);		
 	}
 
 	private static void sendMessage() {
@@ -104,60 +132,88 @@ public class Main {
 	private static void editProfile() {
 		Scanner intinput = new Scanner(System.in);
 		Scanner stringinput = new Scanner(System.in);
-		while(true) {
-			System.out.println("O que você quer editar?\n [1] Nome\n [2] Idade\n [3] Genro");
-			int input = intinput.nextInt();			
-			switch(input) {
-			case 1:
-				System.out.println("Novo nome: ");
-				String newName = stringinput.nextLine();
-				activeUser.getProfile().setName(newName);
-				break;
-			case 2:
-				System.out.println("Nova idade: ");
-				int newAge = intinput.nextInt();
-				activeUser.getProfile().setAge(newAge);
-				break;
-			case 3:
-				System.out.println("Novo Genero: ");
-				String newSex = stringinput.nextLine();
-				activeUser.getProfile().setSex(newSex);
-				break;
-			default:
-				System.out.println("Opção Invalida");
-			}
-			accounts.replace(activeUser.getName(), activeUser);
+		if (activeUser == null) {
+			System.out.println("Conta não conectada");
+			return;
 		}
-
+		if (activeUser.getProfile() != null) {
+			int input;
+			do {
+				System.out.println("O que você quer editar?\n [1] Nome\n [2] Idade\n [3] Gênero\n [0] Voltar ao menu principal");
+				input = intinput.nextInt();			
+				switch(input) {
+				case 1:
+					System.out.println("Novo User: ");
+					String newName = stringinput.nextLine();
+					activeUser.getProfile().setName(newName);
+					break;
+				case 2:
+					System.out.println("Nova idade: ");
+					int newAge = intinput.nextInt();
+					activeUser.getProfile().setAge(newAge);
+					break;
+				case 3:
+					System.out.println("Novo Genero: ");
+					String newSex = stringinput.nextLine();
+					activeUser.getProfile().setSex(newSex);
+					break;
+				case 0:
+					break;
+				default:
+					System.out.println("Opção Invalida");
+				}
+				accounts.replace(activeUser.getName(), activeUser);
+			}while(input != 0);
+		}else {
+			System.out.println("Perfil ainda não foi criado");
+		}
 	}
 
 	private static void createProfile() {
-		//ver se ja existe um profile
+		Scanner intinput = new Scanner(System.in);
+		Scanner stringinput = new Scanner(System.in);
 		if (activeUser == null) {
-			System.out.println("conta não existente");
+			System.out.println("Conta não existente");
 			return;
 		}
-		// user, age, sex;
-		// 
-		String name = "";
-		int age = 0;
-		String sex = "";
-		Profile f = new Profile(name, age, sex);
-		activeUser.setProfile(f);
-		accounts.replace(activeUser.getName(), activeUser);
+		if (activeUser.getProfile() == null) {
+			System.out.println("Digite seu User: ");
+			String user = stringinput.nextLine();
+			System.out.println("Digite sua idade: ");
+			int age = intinput.nextInt();
+			System.out.println("Gênero, digite:\n [M] - Masculino\n [F] - Feminino");
+			char gen = stringinput.next().charAt(0);
+			String sex = null;
+			if (gen == 'M' || gen == 'm') {
+				sex = "Masculino";
+			} else if (gen == 'F' || gen == 'f') {
+				sex = "Feminino";
+			}
+			Profile p = new Profile(user, age, sex);
+			activeUser.setProfile(p);
+			accounts.replace(activeUser.getName(), activeUser);
+			System.out.println("Perfil criado com sucesso!");
+		}else {
+			System.out.println("Perfil já existente!");
+		}
 	}
 
 	private static void createAccount() {
-		// TODO Auto-generated method stub
-		System.out.println("...");
-		// scan pra login
-		System.out.println("");
-		// scan pra senha
-		System.out.println();
-		// scan pra nome
-		//add hash usando nome do usuario como key
+		Scanner scan = new Scanner(System.in);
+		//Account acc = new Account();
 		activeUser = new Account();
-		accounts.put("", activeUser);
+		System.out.println("Digite seu Login: ");
+		String theLogin = scan.nextLine();
+		activeUser.setLogin(theLogin);
+		System.out.println("Digite sua Senha: ");
+		String thePsw = scan.nextLine();
+		activeUser.setPsw(thePsw);
+		System.out.println("Digite seu Nome: ");
+		String theName = scan.nextLine();
+		activeUser.setName(theName);
+
+		accounts.put(theName, activeUser);
+
+		}
 	}
 
-}
