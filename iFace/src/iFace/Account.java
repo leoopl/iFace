@@ -6,6 +6,8 @@ public class Account {
 	private String login;
 	private String psw;
 	private String name;
+	
+	
 	public Profile getProfile() {
 		return profile;
 	}

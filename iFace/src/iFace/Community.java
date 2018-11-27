@@ -6,8 +6,17 @@ public class Community {
 	private String name;
 	private String desc;
 	private String owner;
-	private List<String> members;
+	private static List<String> members;
 	
+	/* remover comunidade
+	 * if(activeUser.getProfile().myCommunities.contains(communiteName)) {
+				activeUser.getProfile().myCommunities.remove(communiteName);
+				Community.removeMember(activeUser.getName());
+	 * */
+	
+	public static void removeMember(String name) {
+		members.remove(name);
+	}
 	
 	public String getName() {
 		return name;

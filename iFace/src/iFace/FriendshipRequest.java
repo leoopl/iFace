@@ -3,13 +3,19 @@ package iFace;
 public class FriendshipRequest {
 	private String senderName;
 	private String receiverName;
-	private int status;
+	private boolean status;
 	
+	public void sendRequest(Profile a1, Profile a2) {
+		//verificar se os dois já são amigos
+		setSenderName(a1.getName());
+		setReceiverName(a2.getName());
+		setStatus(true);		
+	}
 	
-	public int getStatus() {
+	public boolean getStatus() {
 		return status;
 	}
-	public void setStatus(int status) {
+	public void setStatus(boolean status) {
 		this.status = status;
 	}
 	public String getReceiverName() {
