@@ -18,6 +18,7 @@ public class Main {
 		
 		int input;
 		do {
+			System.out.println();
 			System.out.println("#####################################");
 			System.out.println("----------------MENU----------------");
 			System.out.println("#####################################");
@@ -115,8 +116,8 @@ public class Main {
 
 	private static void searchCommunite() {
 		Scanner input = new Scanner(System.in);
-		if (activeUser == null) {
-			System.out.println("Conta não conectada");
+		if (activeUser == null || activeUser.getProfile() == null) {
+			System.out.println("Conta não conectada ou Perfil não criado");
 			return;
 		}
 		System.out.println(communities.keySet());
@@ -133,8 +134,8 @@ public class Main {
 
 	private static void createComunite() {
 		Scanner input = new Scanner(System.in);
-		if (activeUser == null) {
-			System.out.println("Você precisa antes criar uma conta");
+		if (activeUser == null || activeUser.getProfile() == null) {
+			System.out.println("Conta não logada ou Perfil não criado");
 			return;
 		}
 		Community c = new Community();
@@ -166,7 +167,7 @@ public class Main {
 			newSend.setMsg(newMsg);
 			newSend.setSenderName(activeUser.getName());
 			try {
-				accounts.get(receiverName).getProfile().getMyMenssage().add(newMsg);
+				accounts.get(receiverName).getProfile().getMyMenssage().put(activeUser.getName(), newMsg);
 			}catch (Exception e) {
 				System.out.println("A pessoa no qual você tentou enviar a mensagem ainda não criou seu perfil");
 			}
@@ -313,7 +314,15 @@ public class Main {
 	}
 	
 	
-	
+	private static void aceptFriend() {
+		Scanner input = new Scanner(System.in);
+		if (activeUser == null || activeUser.getProfile() == null) {
+			System.out.println("Você precisa antes criar uma conta e seu perfil");
+			return;
+		}
+		
+		
+	}
 	
 	
 	}

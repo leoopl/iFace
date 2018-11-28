@@ -1,6 +1,7 @@
 package iFace;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 
@@ -8,7 +9,7 @@ public class Profile {
 	List<FriendshipRequest> friendshipRequest;
 	List<String> myCommunities;
 	List<String> friendName;
-	List<String> myMenssage;
+	HashMap<String, String> myMenssage;
 	private String name;
 	private int age;
 	private String sex;
@@ -17,11 +18,19 @@ public class Profile {
 		super();
 		this.friendshipRequest = new ArrayList<>();
 		this.myCommunities = new ArrayList<>();
-		this.myMenssage = new ArrayList<>();
+		this.myMenssage = new HashMap<>();
 		this.friendName = new ArrayList<>();
 		this.setName(name);
 		this.setAge(age);
 		this.setSex(sex);
+	}
+
+	public void setMyMenssage(HashMap<String, String> myMenssage) {
+		this.myMenssage = myMenssage;
+	}
+
+	public HashMap<String, String> getMyMenssage() {
+		return (HashMap<String, String>) myMenssage;
 	}
 
 	public String getName() {
@@ -72,18 +81,11 @@ public class Profile {
 		this.friendName = friendName;
 	}
 
-	public List<String> getMyMenssage() {
-		return myMenssage;
-	}
-
-	public void setMyMenssage(List<String> myMenssage) {
-		this.myMenssage = myMenssage;
-	}
 
 	@Override
 	public String toString() {
-		return "Profile [myCommunities=" + myCommunities + ", friendName=" + friendName + ", myMenssage=" + myMenssage
-				+ ", user name=" + name + ", age=" + age + ", sex=" + sex + "]";
+		return "Profile [friendshipRequest=" + friendshipRequest + ", myCommunities=" + myCommunities + ", friendName="
+				+ friendName + ", myMenssage = " + myMenssage + ", user name=" + name + ", age=" + age + ", sex=" + sex + "]";
 	}
 	
 	

@@ -6,7 +6,6 @@ public class Message {
 	private String receiverName;
 	
 	
-	
 	public String getMsg() {
 		return msg;
 	}
