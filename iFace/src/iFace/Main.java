@@ -31,6 +31,7 @@ public class Main {
 		    System.out.println("[8] Informação do Perfil");
 		    System.out.println("[9] Remover Conta");
 		    System.out.println("[10] Login");
+		    System.out.println("[11] Logoff");
 		    System.out.println("[0] Sair");
 			input = scan.nextInt();
 
@@ -64,6 +65,9 @@ public class Main {
 				break;
 			case 10:
 				login();
+				break;
+			case 11:
+				activeUser = null;
 				break;
 			case 0:
 				System.out.println("bye bye!");
@@ -161,7 +165,11 @@ public class Main {
 			String newMsg = input.nextLine();
 			newSend.setMsg(newMsg);
 			newSend.setSenderName(activeUser.getName());
-			accounts.get(receiverName).getProfile().getMyMenssage().add(newMsg);
+			try {
+				accounts.get(receiverName).getProfile().getMyMenssage().add(newMsg);
+			}catch (Exception e) {
+				System.out.println("A pessoa no qual você tentou enviar a mensagem ainda não criou seu perfil");
+			}
 		}else {
 			System.out.println("Usuario inexistente");
 		}		
