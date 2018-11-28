@@ -5,8 +5,7 @@ public class FriendshipRequest {
 	private String receiverName;
 	private boolean status;
 	
-	public void sendRequest(Profile a1, Profile a2) {
-		//verificar se os dois já são amigos
+	public void sendRequest(Account a1, Account a2) {
 		setSenderName(a1.getName());
 		setReceiverName(a2.getName());
 		setStatus(true);		

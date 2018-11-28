@@ -30,6 +30,7 @@ public class Main {
 		    System.out.println("[7] Entrar em uma Comunidade");
 		    System.out.println("[8] Informação do Perfil");
 		    System.out.println("[9] Remover Conta");
+		    System.out.println("[10] Login");
 		    System.out.println("[0] Sair");
 			input = scan.nextInt();
 
@@ -61,6 +62,9 @@ public class Main {
 			case 9:
 				removeAccount();
 				break;
+			case 10:
+				login();
+				break;
 			case 0:
 				System.out.println("bye bye!");
 				break;
@@ -89,6 +93,8 @@ public class Main {
 				friendList.remove(userToRemove);
 			}
 			acc.getProfile().setFriendName(friendList);
+			
+			
 			accounts.replace(acc.getName(), acc);
 		}
 		accounts.remove(userToRemove);
@@ -96,8 +102,8 @@ public class Main {
 	}
 
 	private static void profileInfo() {
-		if (activeUser == null) {
-			System.out.println("Conta não conectada");
+		if (activeUser == null || activeUser.getProfile() == null) {
+			System.out.println("Você precisa conectar ou criar seu perfil antes!");
 			return;
 		}
 		System.out.println(activeUser.getProfile().toString());
@@ -163,8 +169,8 @@ public class Main {
 
 	private static void sendFriendshipRequest() {
 		Scanner input = new Scanner(System.in);
-		if (activeUser == null) {
-			System.out.println("Você precisa antes criar uma conta");
+		if (activeUser == null || activeUser.getProfile() == null) {
+			System.out.println("Você precisa antes criar uma conta e seu perfil");
 			return;
 		}
 		FriendshipRequest newRequest = new FriendshipRequest();
@@ -174,8 +180,12 @@ public class Main {
 			if (activeUser.getProfile().getFriendName().contains(requested)) {
 				System.out.println("Vocês já são amigos!");
 			}else {
-				newRequest.sendRequest(activeUser.getProfile(), accounts.get(requested).getProfile());
-				accounts.get(requested).getProfile().getFriendshipRequest().add(newRequest);
+				try{
+					newRequest.sendRequest(activeUser, accounts.get(requested));
+					accounts.get(requested).getProfile().getFriendshipRequest().add(newRequest);
+				}catch (Exception e) {
+					System.out.println("O amigo que você tentou adicionar não tem perfil!");
+				}
 			}
 		} else {
 			System.out.println("Pessoa inexistente.");
@@ -253,20 +263,50 @@ public class Main {
 
 	private static void createAccount() {
 		Scanner scan = new Scanner(System.in);
-		//Account acc = new Account();
-		activeUser = new Account();
+		Account acc = new Account();
+		acc = new Account();
 		System.out.println("Digite seu Login: ");
 		String theLogin = scan.nextLine();
-		activeUser.setLogin(theLogin);
+		acc.setLogin(theLogin);
 		System.out.println("Digite sua Senha: ");
 		String thePsw = scan.nextLine();
-		activeUser.setPsw(thePsw);
+		acc.setPsw(thePsw);
 		System.out.println("Digite seu Nome: ");
 		String theName = scan.nextLine();
-		activeUser.setName(theName);
+		acc.setName(theName);
 
-		accounts.put(theName, activeUser);
-
+		accounts.put(theName, acc);
 		}
+	
+	
+	private static void login() {
+		Scanner input = new Scanner(System.in);
+		System.out.println("Login: ");
+		String login = input.nextLine();
+		System.out.println("Senha: ");
+		String thePsw = input.nextLine();
+		if (searchUser(login, thePsw)) {
+			System.out.println("Logado");
+		} else {
+			System.out.println("Login ou Senha invalido");
+		}
+		
+	}
+	
+	private static boolean searchUser(String login, String senha) {
+		for (String key : accounts.keySet()) {
+			Account acc = accounts.get(key);
+			if (acc.getLogin().equals(login) && acc.getPsw().equals(senha)) {
+				activeUser = acc;
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	
+	
+	
+	
 	}
 

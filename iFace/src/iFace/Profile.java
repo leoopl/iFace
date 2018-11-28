@@ -83,7 +83,7 @@ public class Profile {
 	@Override
 	public String toString() {
 		return "Profile [myCommunities=" + myCommunities + ", friendName=" + friendName + ", myMenssage=" + myMenssage
-				+ ", name=" + name + ", age=" + age + ", sex=" + sex + "]";
+				+ ", user name=" + name + ", age=" + age + ", sex=" + sex + "]";
 	}
 	
 	

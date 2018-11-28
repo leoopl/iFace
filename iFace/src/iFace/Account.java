@@ -8,6 +8,7 @@ public class Account {
 	private String name;
 	
 	
+	
 	public Profile getProfile() {
 		return profile;
 	}
