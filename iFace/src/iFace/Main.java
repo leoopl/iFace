@@ -85,25 +85,30 @@ public class Main {
 	private static void removeAccount() {
 		Scanner input = new Scanner(System.in);
 		if (activeUser == null) {
-			System.out.println("Conta não criada");
+			System.out.println("Conta não logada");
 			return;
 		}
 		System.out.println("Excluind conta....");
 		String userToRemove = activeUser.getName();
 		
-		for(String key : accounts.keySet()) {
-			Account acc = accounts.get(key);
-			List<String> friendList = acc.getProfile().getFriendName();
-			if(friendList.contains(userToRemove)) {
-				friendList.remove(userToRemove);
+		if (activeUser.getProfile() == null) {
+			accounts.remove(userToRemove);
+			activeUser = null;
+		} else {
+			for(String key : accounts.keySet()) {
+				Account acc = accounts.get(key);
+				List<String> friendList = acc.getProfile().getFriendName();
+				if(friendList.contains(userToRemove)) {
+					friendList.remove(userToRemove);
+				}
+				acc.getProfile().setFriendName(friendList);
+				
+				
+				accounts.replace(acc.getName(), acc);
 			}
-			acc.getProfile().setFriendName(friendList);
-			
-			
-			accounts.replace(acc.getName(), acc);
+			accounts.remove(userToRemove);
+			activeUser = null;
 		}
-		accounts.remove(userToRemove);
-		activeUser = null;
 	}
 
 	private static void profileInfo() {
@@ -154,7 +159,7 @@ public class Main {
 	private static void sendMessage() {
 		Scanner input = new Scanner(System.in);
 		if (activeUser == null) {
-			System.out.println("Você precisa antes criar uma conta");
+			System.out.println("Você precisa antes conectar a uma conta");
 			return;
 		}
 		Message newSend = new Message();
@@ -183,7 +188,7 @@ public class Main {
 			return;
 		}
 		FriendshipRequest newRequest = new FriendshipRequest();
-		System.out.println("Quem você deseja adicionar: ");
+		System.out.println("Digite o nome de quem você deseja adicionar: ");
 		String requested = input.nextLine();
 		if (accounts.containsKey(requested)) {
 			if (activeUser.getProfile().getFriendName().contains(requested)) {
